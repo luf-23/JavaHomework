@@ -1,0 +1,56 @@
+@startuml Facade Pattern
+
+title 外观模式 - 保安系统
+
+class Camera {
+    + start(): void
+    + stop(): void
+}
+
+class Light {
+    + turnOn(): void
+    + turnOff(): void
+}
+
+class Sensor {
+    + activate(): void
+    + deactivate(): void
+}
+
+class Alarm {
+    + enable(): void
+    + disable(): void
+}
+
+class SecurityFacade {
+    - camera: Camera
+    - light: Light
+    - sensor: Sensor
+    - alarm: Alarm
+    + SecurityFacade()
+    + activateSecurity(): void
+    + deactivateSecurity(): void
+}
+
+SecurityFacade o-- Camera
+SecurityFacade o-- Light
+SecurityFacade o-- Sensor
+SecurityFacade o-- Alarm
+
+note right of SecurityFacade::activateSecurity
+  统一启动所有设备：
+  1. camera.start()
+  2. light.turnOn()
+  3. sensor.activate()
+  4. alarm.enable()
+end note
+
+note right of SecurityFacade::deactivateSecurity
+  统一关闭所有设备：
+  1. camera.stop()
+  2. light.turnOff()
+  3. sensor.deactivate()
+  4. alarm.disable()
+end note
+
+@enduml

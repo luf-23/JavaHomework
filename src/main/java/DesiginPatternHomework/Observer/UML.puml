@@ -1,0 +1,55 @@
+@startuml Observer Pattern
+
+title 观察者模式 - 商品变化通知
+
+interface Observer {
+    + update(productName: String, oldPrice: double, newPrice: double): void
+}
+
+class Member {
+    - name: String
+    - email: String
+    + Member(name: String, email: String)
+    + update(productName: String, oldPrice: double, newPrice: double): void
+}
+
+class Product {
+    - name: String
+    - price: double
+    - observers: List<Observer>
+    + Product(name: String, price: double)
+    + attach(observer: Observer): void
+    + detach(observer: Observer): void
+    + notifyObservers(oldPrice: double): void
+    + setPrice(newPrice: double): void
+    + setName(newName: String): void
+    + getName(): String
+    + getPrice(): double
+}
+
+' ✅ 正确：Member 实现 Observer
+Member ..|> Observer : implements
+
+' ✅ 正确：Product 聚合 Observer（1 对 多）
+Product "1" *-- "0..*" Observer
+
+note right of Product
+  Subject (主题)
+  管理观察者列表
+  当状态变化时通知观察者
+end note
+
+note right of Member
+  ConcreteObserver (具体观察者)
+  实现 update 方法
+  接收商品变化通知
+end note
+
+' ✅ 修正：无法直接注释方法，改用对 Product 的底部注释，并指明方法
+note bottom of Product
+  <b>notifyObservers()</b> 方法：
+  遍历 observers 列表，
+  调用每个观察者的 update() 方法
+end note
+
+@enduml

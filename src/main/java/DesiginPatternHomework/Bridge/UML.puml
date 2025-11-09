@@ -1,0 +1,59 @@
+@startuml Bridge Pattern
+
+title 桥接模式 - 咖啡店
+
+abstract class Coffee {
+    # additives: CoffeeAdditives
+    + Coffee(additives: CoffeeAdditives)
+    + {abstract} make(): void
+}
+
+class SmallCoffee {
+    + make(): void
+}
+
+class MediumCoffee {
+    + make(): void
+}
+
+class JorumCoffee {
+    + make(): void
+}
+
+interface CoffeeAdditives {
+    + add(): String
+}
+
+class Milk {
+    + add(): String
+}
+
+class Sugar {
+    + add(): String
+}
+
+class Lemon {
+    + add(): String
+}
+
+Coffee <|-- SmallCoffee
+Coffee <|-- MediumCoffee
+Coffee <|-- JorumCoffee
+
+Coffee o-- CoffeeAdditives
+
+CoffeeAdditives <|.. Milk
+CoffeeAdditives <|.. Sugar
+CoffeeAdditives <|.. Lemon
+
+note right of Coffee
+  咖啡抽象类持有
+  添加物接口引用
+end note
+
+note bottom of CoffeeAdditives
+  添加物接口可以
+  灵活组合和扩展
+end note
+
+@enduml

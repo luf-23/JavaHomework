@@ -1,0 +1,60 @@
+@startuml Strategy Pattern
+
+title 策略模式 - 图书折扣系统
+
+interface DiscountStrategy {
+    + calculatePrice(originalPrice: double): double
+}
+
+class ComputerDiscount {
+    + calculatePrice(originalPrice: double): double
+}
+
+class EnglishDiscount {
+    + calculatePrice(originalPrice: double): double
+}
+
+class NovelDiscount {
+    + calculatePrice(originalPrice: double): double
+}
+
+class NoDiscount {
+    + calculatePrice(originalPrice: double): double
+}
+
+class Book {
+    - title: String
+    - originalPrice: double
+    - discountStrategy: DiscountStrategy
+    + Book(title: String, price: double, strategy: DiscountStrategy)
+    + setDiscountStrategy(strategy: DiscountStrategy): void
+    + getFinalPrice(): double
+    + getTitle(): String
+}
+
+DiscountStrategy <|.. ComputerDiscount
+DiscountStrategy <|.. EnglishDiscount
+DiscountStrategy <|.. NovelDiscount
+DiscountStrategy <|.. NoDiscount
+
+Book o-- DiscountStrategy
+
+note right of ComputerDiscount
+  计算机类图书：7折
+end note
+
+note right of EnglishDiscount
+  英语类图书：6折
+end note
+
+note right of NoDiscount
+  其他类图书：无折扣
+end note
+
+note right of Book
+  Context (上下文)
+  持有策略接口引用
+  可动态切换策略
+end note
+
+@enduml
