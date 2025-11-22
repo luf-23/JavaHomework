@@ -1,7 +1,8 @@
 package DesiginPatternHomework.Bridge;
 
 public abstract class Coffee {
-    protected CoffeeAdditives additives;
+    //高层控制器必须持有implementor的引用
+    protected CoffeeAdditives additives;//添加物
 
     public Coffee(CoffeeAdditives additives) {
         this.additives = additives;

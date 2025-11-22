@@ -11,7 +11,6 @@ public class ShieldDecorator extends SheepDecorator {
     @Override
     public void run() {
         super.run();
-        System.out.println("  → 启动保护罩：免疫一次攻击！");
     }
 
     @Override

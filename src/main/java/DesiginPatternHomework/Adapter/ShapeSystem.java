@@ -1,12 +1,5 @@
 package DesiginPatternHomework.Adapter;
 
-public class ShapeSystem {
-    private ShapeSystem() {
-        throw new AssertionError("禁止实例化");
-    }
-}
-
-
 // 目标接口
 interface Shape {
     void draw();
