@@ -1,0 +1,50 @@
+@startuml Memento Pattern
+
+class Editor {
+    - cursor: Integer
+    - content: String
+    + Editor()
+    + Editor(content: String)
+    + write(text: String): void
+    + change(index: int): void
+    + getContent(): String
+    + save(): Memento
+    + restore(memento: Memento): void
+}
+
+class Memento {
+    - content: String
+    - cursor: Integer
+    - Memento(content: String, cursor: Integer)
+}
+
+class HistoryManager {
+    - history: Stack<Editor.Memento>
+    + push(memento: Editor.Memento): void
+    + pop(): Editor.Memento
+    + isEmpty(): boolean
+}
+
+Editor +-- Memento : 内部类
+HistoryManager o-- Memento : 聚合
+
+note right of Editor
+    发起人(Originator)
+    创建备忘录保存当前状态，
+    也可从备忘录恢复状态
+end note
+
+note right of Memento
+    备忘录(Memento)
+    存储编辑器的状态快照
+    作为 Editor 的内部类，
+    对外是黑盒，只能通过 Editor 访问
+end note
+
+note right of HistoryManager
+    管理者(Caretaker)
+    负责保存和管理备忘录，
+    但不知道备忘录的内部细节
+end note
+
+@enduml

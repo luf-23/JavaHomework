@@ -1,0 +1,115 @@
+@startuml Command Pattern
+
+interface Command {
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class LightOnCommand {
+    - light: Light
+    + LightOnCommand(light: Light)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class LightOffCommand {
+    - light: Light
+    + LightOffCommand(light: Light)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class StereoOnCommand {
+    - stereo: Stereo
+    + StereoOnCommand(stereo: Stereo)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class StereoOffCommand {
+    - stereo: Stereo
+    + StereoOffCommand(stereo: Stereo)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class StereoSetVolumeCommand {
+    - stereo: Stereo
+    - preVolume: int
+    - targetVolume: int
+    + StereoSetVolumeCommand(stereo: Stereo, targetVolume: int)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class NoCommand {
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class Light {
+    - position: String
+    - isOn: boolean
+    + Light(position: String)
+    + on(): void
+    + off(): void
+    + getPosition(): String
+}
+
+class Stereo {
+    - posistion: String
+    - isOn: boolean
+    - volume: int
+    + Stereo(posistion: String)
+    + on(): void
+    + off(): void
+    + setVolume(volume: int): void
+    + getVolume(): int
+    + getPosistion(): String
+}
+
+class RemoteControl {
+    - onCommands: Command[]
+    - offCommands: Command[]
+    - undoStack: Stack<Command>
+    + RemoteControl()
+    + setCommand(slot: int, onCommand: Command, offCommand: Command): void
+    + onButtonPressed(slot: int): void
+    + offButtonPressed(slot: int): void
+    + undoButtonPressed(): void
+    + printRemoteControl(): void
+}
+
+Command <|.. LightOnCommand
+Command <|.. LightOffCommand
+Command <|.. StereoOnCommand
+Command <|.. StereoOffCommand
+Command <|.. StereoSetVolumeCommand
+Command <|.. NoCommand
+
+LightOnCommand --> Light : 持有
+LightOffCommand --> Light : 持有
+StereoOnCommand --> Stereo : 持有
+StereoOffCommand --> Stereo : 持有
+StereoSetVolumeCommand --> Stereo : 持有
+
+RemoteControl o-- Command : 聚合
+
+note right of Command
+    命令接口定义了执行、
+    撤销和获取对象名称的方法
+end note
+
+note right of RemoteControl
+    遥控器维护多个命令槽位，
+    使用栈记录命令历史以支持撤销功能
+end note
+
+@enduml

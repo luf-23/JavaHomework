@@ -1,0 +1,44 @@
+@startuml Composite Pattern
+
+interface FileSystemItem {
+    + print(prefix: String): void
+    + getSize(): Long
+}
+
+class File {
+    - name: String
+    - size: Long
+    + File(name: String, size: Long)
+    + print(prefix: String): void
+    + getSize(): Long
+}
+
+class Folder {
+    - name: String
+    - children: List<FileSystemItem>
+    + Folder(name: String, children: List<FileSystemItem>)
+    + print(prefix: String): void
+    + getSize(): Long
+}
+
+FileSystemItem <|.. File
+FileSystemItem <|.. Folder
+Folder o-- FileSystemItem : 聚合
+
+note right of FileSystemItem
+    组件接口定义了文件系统项的
+    共同操作：打印和获取大小
+end note
+
+note right of File
+    叶子节点，表示文件
+    直接返回自身大小
+end note
+
+note right of Folder
+    组合节点，表示文件夹
+    递归计算所有子项的总大小
+    递归打印所有子项
+end note
+
+@enduml
