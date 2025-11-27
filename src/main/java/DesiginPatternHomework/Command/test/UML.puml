@@ -1,0 +1,90 @@
+@startuml Command Pattern Test - Application Control
+
+title 命令模式测试示例 - 应用程序控制
+
+interface Command {
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class AppStartCommand {
+    - app: Application
+    + AppStartCommand(app: Application)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class AppCloseCommand {
+    - app: Application
+    + AppCloseCommand(app: Application)
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class NoCommand {
+    + execute(): void
+    + undo(): void
+    + getObjectName(): String
+}
+
+class Application {
+    - name: String
+    - exePath: String
+    - process: Process
+    + Application(name: String, exePath: String)
+    + start(): void
+    + close(): void
+    + isRunning(): boolean
+    + getName(): String
+    + getExePath(): String
+}
+
+class AppRemoteControl {
+    - startCommands: Command[]
+    - closeCommands: Command[]
+    - undoStack: Stack<Command>
+    + AppRemoteControl()
+    + setCommand(slot: int, startCommand: Command, closeCommand: Command): void
+    + startApp(slot: int): void
+    + closeApp(slot: int): void
+    + undo(): void
+    + printMenu(): void
+}
+
+Command <|.. AppStartCommand
+Command <|.. AppCloseCommand
+Command <|.. NoCommand
+
+AppStartCommand --> Application : 持有
+AppCloseCommand --> Application : 持有
+
+AppRemoteControl o-- Command : 聚合
+
+note right of Application
+  接收者(Receiver)
+  实际执行应用程序
+  启动和关闭操作
+end note
+
+note right of AppStartCommand
+  具体命令
+  封装启动应用的请求
+  undo时关闭应用
+end note
+
+note right of AppCloseCommand
+  具体命令
+  封装关闭应用的请求
+  undo时启动应用
+end note
+
+note right of AppRemoteControl
+  调用者(Invoker)
+  管理应用程序命令
+  支持撤销操作
+end note
+
+@enduml

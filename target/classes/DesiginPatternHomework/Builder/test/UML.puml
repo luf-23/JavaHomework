@@ -1,0 +1,50 @@
+@startuml Builder Pattern Test - Computer
+
+title 建造者模式测试示例 - 电脑配置
+
+class Computer {
+    - cpu: String
+    - ram: String
+    - ssd: String
+    - gpu: String
+    - Computer(builder: Builder)
+    + toString(): String
+}
+
+class Builder {
+    - cpu: String
+    - ram: String
+    - ssd: String
+    - gpu: String
+    + Builder(cpu: String)
+    + buildRAM(ram: String): Builder
+    + buildSSD(ssd: String): Builder
+    + buildGPU(gpu: String): Builder
+    + build(): Computer
+}
+
+Computer +-- Builder : 内部类
+
+Builder ..> Computer : 创建
+
+note right of Computer
+  产品类
+  包含多个组件
+end note
+
+note right of Builder
+  建造者(内部类)
+  使用链式调用
+  构建Computer对象
+end note
+
+note bottom of Builder
+  示例用法：
+  Computer computer = new Computer.Builder("Intel i7")
+      .buildRAM("16GB")
+      .buildSSD("512GB")
+      .buildGPU("RTX 3060")
+      .build();
+end note
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml Factory Pattern
+
+title 工厂模式 - OEM笔记本制造
+
+interface Laptop {
+    + produce(): void
+}
+
+class HPLaptop {
+    + produce(): void
+}
+
+class AcerLaptop {
+    + produce(): void
+}
+
+class LenovoLaptop {
+    + produce(): void
+}
+
+class DellLaptop {
+    + produce(): void
+}
+
+class LaptopFactory {
+    + createLaptop(brand: String): Laptop
+}
+
+Laptop <|.. HPLaptop
+Laptop <|.. AcerLaptop
+Laptop <|.. LenovoLaptop
+Laptop <|.. DellLaptop
+LaptopFactory ..> Laptop : creates
+
+note right of LaptopFactory
+  根据品牌参数创建
+  对应的笔记本对象
+end note
+
+@enduml

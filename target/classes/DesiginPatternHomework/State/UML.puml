@@ -1,0 +1,116 @@
+@startuml State Pattern - Vending Machine
+
+' 样式设置
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam class {
+    BackgroundColor<<Context>> LightYellow
+    BackgroundColor<<State>> LightBlue
+    BackgroundColor<<ConcreteState>> LightGreen
+    BorderColor Black
+    ArrowColor Black
+}
+
+' 状态接口
+interface VendingMachineState <<State>> {
+    + insertCoin(machine: VendingMachine): void
+    + selectProduct(machine: VendingMachine): void
+    + refund(machine: VendingMachine): void
+    + dispense(machine: VendingMachine): void
+}
+
+' 具体状态类
+class IdleState <<ConcreteState>> {
+    + insertCoin(machine: VendingMachine): void
+    + selectProduct(machine: VendingMachine): void
+    + refund(machine: VendingMachine): void
+    + dispense(machine: VendingMachine): void
+}
+
+class HasCoinState <<ConcreteState>> {
+    + insertCoin(machine: VendingMachine): void
+    + selectProduct(machine: VendingMachine): void
+    + refund(machine: VendingMachine): void
+    + dispense(machine: VendingMachine): void
+}
+
+class DispensingState <<ConcreteState>> {
+    + insertCoin(machine: VendingMachine): void
+    + selectProduct(machine: VendingMachine): void
+    + refund(machine: VendingMachine): void
+    + dispense(machine: VendingMachine): void
+}
+
+class SoldOutState <<ConcreteState>> {
+    + insertCoin(machine: VendingMachine): void
+    + selectProduct(machine: VendingMachine): void
+    + refund(machine: VendingMachine): void
+    + dispense(machine: VendingMachine): void
+}
+
+' 上下文类
+class VendingMachine <<Context>> {
+    - idleState: VendingMachineState
+    - hasCoinState: VendingMachineState
+    - dispensingState: VendingMachineState
+    - soldOutState: VendingMachineState
+    - currentState: VendingMachineState
+    - productCount: int
+    --
+    + VendingMachine(productCount: int)
+    + insertCoin(): void
+    + selectProduct(): void
+    + refund(): void
+    + dispense(): void
+    + setState(state: VendingMachineState): void
+    + reduceProductCount(): void
+    + refill(count: int): void
+    + getProductCount(): int
+    + getIdleState(): VendingMachineState
+    + getHasCoinState(): VendingMachineState
+    + getDispensingState(): VendingMachineState
+    + getSoldOutState(): VendingMachineState
+    + getCurrentState(): VendingMachineState
+}
+
+' 关系
+VendingMachineState <|.. IdleState
+VendingMachineState <|.. HasCoinState
+VendingMachineState <|.. DispensingState
+VendingMachineState <|.. SoldOutState
+
+VendingMachine o--> VendingMachineState : currentState
+
+VendingMachine ..> IdleState : creates
+VendingMachine ..> HasCoinState : creates
+VendingMachine ..> DispensingState : creates
+VendingMachine ..> SoldOutState : creates
+
+' 注释
+note right of VendingMachineState
+  <b>State（状态接口）</b>
+  定义所有状态的通用接口
+  封装与特定状态相关的行为
+end note
+
+note bottom of VendingMachine
+  <b>Context（上下文）</b>
+  维护当前状态对象的引用
+  将行为委托给当前状态对象
+  提供状态切换的方法
+end note
+
+note bottom of IdleState
+  <b>ConcreteState（具体状态）</b>
+  实现特定状态下的行为
+  可以访问Context改变其状态
+  
+  状态转换：
+  IdleState → HasCoinState (投币)
+  HasCoinState → DispensingState (选择商品)
+  HasCoinState → IdleState (退币)
+  DispensingState → IdleState (出货完成)
+  DispensingState → SoldOutState (库存为0)
+end note
+
+@enduml

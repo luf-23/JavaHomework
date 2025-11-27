@@ -1,0 +1,78 @@
+@startuml Observer Pattern Test - Weather Station
+
+title 观察者模式测试示例 - 气象站
+
+interface Subject {
+    + registerObserver(observer: Observrer): void
+    + removeObserver(observer: Observrer): void
+    + notifyObservers(): void
+}
+
+interface Observrer {
+    + update(weatherData: WeatherData): void
+}
+
+class WeatherData {
+    - temperature: float
+    - humidity: float
+    - pressure: float
+    - observers: List<Observrer>
+    + WeatherData(temperature: float, humidity: float, pressure: float)
+    + registerObserver(observer: Observrer): void
+    + removeObserver(observer: Observrer): void
+    + notifyObservers(): void
+    + getTemperature(): float
+    + getHumidity(): float
+    + getPressure(): float
+    + setTemperature(temperature: float): void
+    + setHumidity(humidity: float): void
+    + setPressure(pressure: float): void
+}
+
+class CurrentWeather {
+    - {static} instance: CurrentWeather
+    - {static} lockObject: Object
+    - temperature: float
+    - humidity: float
+    - pressure: float
+    - CurrentWeather()
+    + {static} getInstance(): CurrentWeather
+    + update(weatherData: WeatherData): void
+    + toString(): String
+}
+
+class TemperatureHistory {
+    - {static} instance: TemperatureHistory
+    - {static} lockObject: Object
+    - tempHistory: List<Float>
+    - TemperatureHistory()
+    + {static} getInstance(): TemperatureHistory
+    + update(weatherData: WeatherData): void
+    + toString(): String
+}
+
+Subject <|.. WeatherData
+Observrer <|.. CurrentWeather
+Observrer <|.. TemperatureHistory
+
+WeatherData o-- Observrer : 聚合
+
+note right of WeatherData
+  具体主题(Subject)
+  当气象数据改变时
+  通知所有观察者
+end note
+
+note right of CurrentWeather
+  具体观察者
+  显示当前天气
+  使用单例模式
+end note
+
+note right of TemperatureHistory
+  具体观察者
+  记录温度历史
+  使用单例模式
+end note
+
+@enduml

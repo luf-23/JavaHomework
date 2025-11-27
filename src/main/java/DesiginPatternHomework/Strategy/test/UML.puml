@@ -1,0 +1,65 @@
+@startuml Strategy Pattern Test - Payment System
+
+title 策略模式测试示例 - 支付系统
+
+interface PayStrategy {
+    + pay(amount: double): void
+}
+
+class AliPay {
+    + pay(amount: double): void
+}
+
+class WeChatPay {
+    + pay(amount: double): void
+}
+
+class CreditCardPay {
+    + pay(amount: double): void
+}
+
+class CashPay {
+    + pay(amount: double): void
+}
+
+class ShoppingCart {
+    - payStrategy: PayStrategy
+    + setPayStrategy(payStrategy: PayStrategy): void
+    + checkout(amount: double): void
+}
+
+PayStrategy <|.. AliPay
+PayStrategy <|.. WeChatPay
+PayStrategy <|.. CreditCardPay
+PayStrategy <|.. CashPay
+
+ShoppingCart o-- PayStrategy : 聚合
+
+note right of PayStrategy
+  支付策略接口
+  定义统一的支付方法
+end note
+
+note right of ShoppingCart
+  上下文(Context)
+  持有支付策略引用
+  可动态切换支付方式
+end note
+
+note bottom of AliPay
+  支付宝支付策略
+end note
+
+note bottom of WeChatPay
+  微信支付策略
+end note
+
+note bottom of CreditCardPay
+  信用卡支付策略
+end note
+
+note bottom of CashPay
+  现金支付策略
+end note
+
+@enduml
